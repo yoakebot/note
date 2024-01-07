@@ -1,0 +1,21 @@
+ps -ef | grep nginx 		在ps -ef的列表中查出含有nginx的项
+rm -rf
+
+杀死进程
+# kill 12345
+强制杀死进程
+# kill -KILL 123456
+彻底杀死进程
+# kill -9 123456
+
+find -name "63*"		查询当前目录下63开头文件
+find / -name "63*"		查询/目录下63开头文件
+find / -iname "63*"		无视大小写
+
+grep "he" test* 		查询test开头文件中含有he的文件
+
+tail -f filename 		把 filename 文件里的最尾部的内容显示在屏幕上，并且不断刷新
+
+jinfo -flags pid 查询虚拟机运行参数信息。
+jmap -heap pid：输出堆内存设置和使用情况（JDK11使用jhsdb jmap --heap --pid pid）
+jstat -gc pid：输出gc信息，包括gc次数和时间，内存使用状况（可带时间和显示条目参数）

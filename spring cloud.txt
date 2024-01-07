@@ -1,0 +1,6 @@
+根据业务把一个大的工程拆成微服务，部署在不同的服务器上的分布式系统，使用远程调用，提高了服务的高可用，而且还可以不同服务使用不同的语言来编写，降低了耦合性。
+
+@EnableDiscoveryClient
+@DubboReference
+
+spring cloud 使用REST api,继续http。dubbo使用rpc。spring cloud生态更丰富。

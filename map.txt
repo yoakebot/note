@@ -1,0 +1,23 @@
+Collections.synchronizedList(ArrayList); get & set时会加锁
+CopyOnWriteArrayList； 使用ReentrantLock 和volatile 来保证并发，读不加锁，写加锁
+
+初始长度	16
+初始化长度	小于最近的2^n（往大了走）
+初始化负载因子	0.75
+扩容时长度	*2	(capacity<<1) 
+jdk 1.7
+	扩容时：最大长度16*0.75(链表长度)+15 = 27
+					最小长度16*0.75 = 12	超过链表阈值再增加时
+	MAP
+		数组	数组	数组	数组
+		hash	hash	hash	hash
+						|
+					hash	
+					链表
+	MAP的数组链表结构，java8之前使用头插法（后来的在上面），因为后来的被查询的几率较高
+	
+jdk 1.8
+	扩容条件： 1) 单个链表插入第9个元素时(binCount<= 8-1)(binCount循环8次，第一次循环时链表头有值) 
+									且 数组长度小于64  便会扩容
+						2)map插入元素大于16*0.75=12时便会扩容。
+	树化：数组长度>=64，单个链表大于8则树化，树小于6则链表化

@@ -1,0 +1,49 @@
+什么是IOC，什么是DI，两者有何区别
+	IOC即控制反转，利用了反射的原理将对象创建的权力交给了spring容器，实现了springIOC容器自动加载、装配、管理bean。
+	DI即依赖注入
+
+	什么是BeanFactory，什么是ApplicationContext，两者有何区别
+		BeanFactory是最简单的IOC容器，通过xml或注解来配置bean，类似于map，通过getBean方法来获取bean实例
+		ApplicableContext实现了BeanFactory，更高级且拥有BeanFactory的全部功能
+	注入方式有哪些
+		setter
+		constructor
+
+	spring如何实现springboot方式的注解
+
+	bean 的 scope
+		singleton	默认、单例。
+		prototype	多例。每次请求都会返回一个新的bean实例
+		request		每次http请求都会产生一个新的bean，只在当前的request有效，请求结束生命周期结束
+		session		每次http请求都会产生一个新的bean，只在当前session有效
+		application/global-session ：每个 Web 应用在启动时创建一个 Bean（应用 Bean），该 bean 仅在当前应用启动时间内有效。
+
+		websocket （仅 Web 应用可用）：每一次 WebSocket 会话产生一个新的 bean。
+
+	Bean的生命周期
+		init->setBeanName->setBeanFactory->setApplicationContext->postProcessBeforeInitialization->afterPropertiesSet->getInitMethodName->postProcessAfterInitialization->destroy->getDestroyMethodName
+
+什么是AOP
+	AOP即面向切面编程，因为实际开发一些日志、权限等功能的实现会侵入业务代码，AOP的使用用来降低系统的耦合性。
+	
+	spring动态代理有哪些
+		jdk动态代理
+		cglib动态代理
+		
+	spring的事务传播机制
+		PROPAGATION_REQUIRED：如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入到这个事务中。这是最常见的选择。
+		PROPAGATION_SUPPORTS：加入当前事务，如果当前没有事务，就以非事务方式执行。
+		PROPAGATION_MANDATORY：使用当前的事务，如果当前没有事务，就抛出异常。
+		PROPAGATION_REQUIRES_NEW：新建事务，如果当前存在事务，把当前事务挂起。
+		PROPAGATION_NOT_SUPPORTED：拒绝以事务方式执行操作，如果当前存在事务，就把当前事务挂起。
+		PROPAGATION_NEVER：以非事务方式执行，如果当前存在事务，则抛出异常。
+		PROPAGATION_NESTED：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。
+		
+事务注解只作用于public方法
+必须由外部方法调用才能生效，除非使用aspectJ或手动事务TransactionManager.rollback
+Spring AOP 属于运行时增强，而 AspectJ 是编译时增强。 Spring AOP 基于代理(Proxying)，而 AspectJ 基于字节码操作
+
+mybatis		
+	#{}和${}的问题
+	#传入的值类似JDBC中的？，会自动转化
+	$传入的值会直接显示在sql中，被sql使用，可能会被sql注入

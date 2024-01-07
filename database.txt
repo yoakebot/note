@@ -1,0 +1,46 @@
+索引
+	hash：通过hash算法以key、value的形式存放，由于无序和hash碰撞的原因，只能定向查询（== in），无法使用范围查询和排序，
+				由于联合索引使用hash算法，使用联合索引的单索引查询无效。hash碰撞而遇到大量相同hash值效率不高。不能避免表扫描。
+	类似目录：小了不需要，多了难以维护且占用空间。按需建立
+	联合索引，最左匹配，>、<、between、like会中断，=、in不会中断
+	explain：sql分析
+锁
+	当前读：
+		读锁：共享锁，上锁时其他session可以读（不可select...for update）但不能写。	Myisam（select) 	innodb:select ... lock in share mode;
+		写锁：排他锁（悲观锁操作即使用排他锁），上锁时其他session不准读（仅可以快照读）不准写。 Myisam（update、insert、delete）innodb:update、insert、delete、select ... for update；
+	快照读：不加锁的非阻塞读：仅select
+		
+		Myisam：表级锁。
+		Innodb：行级锁。不走索引时使用表级锁。（写写冲突）
+		
+	rr级别下：走非唯一索引或不走索引使用gap锁：where查询时，全部命中不加锁，部分命中或未命中则加锁
+																						走非唯一索引：锁区间
+																						不走索引：锁全表
+开启事务：begin /start transaction; ...sql
+事务
+	特性：ACID
+	isolation：read uncommitted 读到其他事务未commit的结果（脏读）
+					read committed 只能读到begin前或commit或rollback的数据（避免了脏读）（出现不可重复度）
+													但是，A事务多次读取数据，B事务修改数据提交后，A事务发现数据发生变化。
+							---------->>>innodb：当前读（select ... lock in share mode）与快照读（select）结果一样，都是修改后的数据
+					repeatable read 无论其他事务做何种操作，当前事务都无法读取到其实事务修改的数据。
+												（当前事务写操作后才可重复读）
+												但是，当当前事务修改数据时，操作的是其他数据已提交的数据
+												（幻读）A事务查询，B事务插入或删除，接着A事务更新全部数据发现总量变化
+							---------->>>MySQL的innodb下：当前读会加行锁而阻塞，避免了幻读
+							---------->>>当前读获取最新结果，快照读获取（前一次快照读（仅仅仅！！select）的结果）
+					serializable 读时默认lock in share mode；避免幻读
+limit优化：
+SELECT *
+FROM tableName AS t1
+JOIN (SELECT id FROM tableName ORDER BY id desc LIMIT 500000, 1) AS t2
+WHERE t1.id <= t2.id ORDER BY t1.id desc LIMIT 2;
+
+非聚集索引：
+select t1.* from test_table1 t1
+inner join (select id from test_table1 order by id_2 limit 4900000,20)t2 on t1.id = t2.id;
+
+主键索引：
+select* from
+(select * from test_table1 order by id desc limit 99980,20) t 
+order by id;

@@ -1,0 +1,9 @@
+为什么使用消息队列
+	异步、削峰、解耦
+缺点
+	可用行降低，多一事不如少一事
+	重复消费
+		幂等性
+	消息丢失
+		手动ack，confirmcallback ，returncallback 
+	顺序消费

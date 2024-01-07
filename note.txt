@@ -1,0 +1,13 @@
+tcp三次握手：
+第一次由客户端发送SYN包到服务端，然后进入SYN_SEND状态。
+第二次由服务端发送SYN+ACK包到客户端，进入SYN_RECV状态。
+第三次有客户端发送ACK包到服务端，完毕后，客服端和服务端进入Established状态。
+
+ACID
+原子性、一致性、隔离性、持久性
+
+isolation
+read-uncommitted 脏读
+read-committed	不可重复读
+repeatable-read 幻读
+serializable

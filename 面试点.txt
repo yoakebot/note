@@ -1,0 +1,24 @@
+spring
+	接口幂等
+	bean注入过程
+	AOP IOC
+	bean的单例实现
+	事务传播
+map、list
+	双向链表、红黑树、1.8新特新、头插尾插
+J.U.C
+	CQS
+	Sync、Lock
+MySQL
+	b+tree、hash结构
+	索引、explain
+	innodb、myisam
+	ACID、事务
+redis
+	memberCache区别
+	缓存雪崩、穿透（查询不存在的key）、击穿（缓存时间过期失效）
+	数据类型、缓存方式
+	并发
+mq
+
+netty

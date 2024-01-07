@@ -1,0 +1,21 @@
+start和run的区别：
+start是当前线程创建一个子线程，然后由子线程调用run方法。
+run是由当前线程执行run方法里的内容，不会创建新线程。
+
+实现线程返回值：
+	主线程等待法
+	Thread.join();
+	实现Callable、FutureTask、Future
+	线程池submit
+			
+线程的六个状态：
+	new、runnable、waiting、timed waiting、blocked、terminated
+sleep和wait
+	wait只能在同步代码块中使用，wait让出cpu会释放锁
+volatile
+	被修饰的变量所有线程可见
+	被修饰的变量写操作在读操作之前
+	防止指令重排序（饿汉式双重验证单例模式）
+
+每个Thread里都有ThreadLocal。
+ThreadLocal有一个内部类ThreadLocalMap，里面有个Entry存放键值对。
