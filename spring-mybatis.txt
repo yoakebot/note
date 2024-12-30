@@ -27,8 +27,8 @@
 	AOP即面向切面编程，因为实际开发一些日志、权限等功能的实现会侵入业务代码，AOP的使用用来降低系统的耦合性。
 	
 	spring动态代理有哪些
-		jdk动态代理
-		cglib动态代理
+		jdk动态代理 	Java动态代理只能对有接口类的类进行代理，并且使用Java原生的反射API进行操作，在生成类上比较高效，但是执行会效率低一些
+		cglib动态代理 	CGLIB能够代理普通类，使用ASM框架直接对字节码进行操作，在类的执行过程中比较高效
 		
 	spring的事务传播机制
 		PROPAGATION_REQUIRED：如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入到这个事务中。这是最常见的选择。
@@ -43,7 +43,30 @@
 必须由外部方法调用才能生效，除非使用aspectJ或手动事务TransactionManager.rollback
 Spring AOP 属于运行时增强，而 AspectJ 是编译时增强。 Spring AOP 基于代理(Proxying)，而 AspectJ 基于字节码操作
 
+Spring MVC 原理如下图所示：
+1、客户端（浏览器）发送请求， DispatcherServlet拦截请求。
+2、DispatcherServlet 根据请求信息调用 HandlerMapping 。HandlerMapping 根据 URL 去匹配查找能处理的 Handler，并会将请求涉及到的拦截器和 Handler 一起封装。
+3、DispatcherServlet 调用 HandlerAdapter适配器执行 Handler 。
+4、Handler 完成对用户请求的处理后，会返回一个 ModelAndView 对象给DispatcherServlet。
+5、ViewResolver 会根据逻辑 View 查找实际的 View。
+6、DispaterServlet 把返回的 Model 传给 View（视图渲染）。
+7、把 View 返回给请求者（浏览器）
+
+循环依赖是指 Bean 对象循环引用，使用三级缓存来解决这个问题。
+
+
+Springboot启动过程
+	构造SpringApplication实例
+	执行实例的run()方法
+	创建applicationContext
+	执行prepareContext()方法
+	执行refreshContext()方法
+	afterRefresh()方法
+
+@SpringBootApplication看作是 @Configuration、@EnableAutoConfiguration、@ComponentScan 注解的集合。
+
 mybatis		
 	#{}和${}的问题
 	#传入的值类似JDBC中的？，会自动转化
 	$传入的值会直接显示在sql中，被sql使用，可能会被sql注入
+Dao 接口里的方法可以重载，但是 Mybatis 的 xml 里面的 ID 不允许重复！多个重载方法对应一个动态sql

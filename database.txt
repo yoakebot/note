@@ -9,7 +9,11 @@
 		读锁：共享锁，上锁时其他session可以读（不可select...for update）但不能写。	Myisam（select) 	innodb:select ... lock in share mode;
 		写锁：排他锁（悲观锁操作即使用排他锁），上锁时其他session不准读（仅可以快照读）不准写。 Myisam（update、insert、delete）innodb:update、insert、delete、select ... for update；
 	快照读：不加锁的非阻塞读：仅select
-		
+		多版本并发控制（MVCC，Multiversion concurrency control）可以看作是乐观控制的模式。
+		MVCC 在 MySQL 中实现所依赖的手段主要是: 隐藏字段、read view、undo log。
+		undo log : undo log 用于记录某行数据的多个版本的数据。
+		read view 和 隐藏字段 : 用来判断当前版本数据的可见性。
+
 		Myisam：表级锁。
 		Innodb：行级锁。不走索引时使用表级锁。（写写冲突）
 		

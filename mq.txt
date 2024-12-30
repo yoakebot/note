@@ -7,3 +7,22 @@
 	消息丢失
 		手动ack，confirmcallback ，returncallback 
 	顺序消费
+
+kafka
+	Queue队列
+	topic订阅模式（主流）一个topic下可以有多个partition（类似队列）
+如何顺序消费
+	1 个 Topic 只对应一个 Partition。
+	发送消息的时候指定 topic, partition, key,data（数据） 4 个参数。（推荐）
+如何保证消息不丢失
+	生产者放send后，获取future.addCallback的结果。
+	消费消息服务做幂等校验，代码里使用手动提交，推荐拉取到消息即提交。
+@RetryableTopic 是 Spring Kafka 中的一个注解,它用于配置某个 Topic 支持消息重试，失败的消息会放入死信队列。
+
+RabbitMQ 
+	中间使用Exchange(交换器) ，包含 4 种类型，direct(默认)，fanout, topic（常用）, 和 headers。
+	fanout使用广播模式，把消息发送给全部队列。
+	direct使用全名指定的Bindingkey 与 RoutingKey来匹配队列
+	topic使用BindingKey 和 RoutingKey来模糊匹配。
+
+消息队列防止消息丢失一般都是使用手动确认，在生产者发送时确认，在消费者收到时确认。

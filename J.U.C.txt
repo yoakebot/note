@@ -11,6 +11,7 @@ run是由当前线程执行run方法里的内容，不会创建新线程。
 线程的六个状态：
 	new、runnable、waiting、timed waiting、blocked、terminated
 sleep和wait
+	sleep() 方法没有释放锁，而 wait() 方法释放了锁 。
 	wait只能在同步代码块中使用，wait让出cpu会释放锁
 volatile
 	被修饰的变量所有线程可见
@@ -19,3 +20,7 @@ volatile
 
 每个Thread里都有ThreadLocal。
 ThreadLocal有一个内部类ThreadLocalMap，里面有个Entry存放键值对。
+
+在使用完 ThreadLocal 后，务必调用 remove() 方法
+
+CPU 密集型任务(N+1) I/O 密集型任务(2N)
