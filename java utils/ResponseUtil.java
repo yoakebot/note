@@ -14,7 +14,7 @@ public class ResponseUtil {
         if (isSuccess(result)) {
             return result.getData();
         }
-        throw new RuntimeException(Optional.ofNullable(result).map(ResultVO::getMsg).orElse("request fail"));
+        throw new RuntimeException(getMsg(result));
     }
 
     public static String getMsg(ResultVO<?> result) {
