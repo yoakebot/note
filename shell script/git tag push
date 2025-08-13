@@ -5,17 +5,18 @@ notepad $PROFILE
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 function gtp($tagName) {
-    # 检查 tag 名称是否为空
     if ([string]::IsNullOrWhiteSpace($tagName)) {
         Write-Error "Tag name cannot be empty"
         return
     }
 
-    # 执行 git 命令
+    $datePrefix = "release_" + (Get-Date -Format "yyyyMMdd") + "_"
+    $fullTagName = $datePrefix + $tagName
+
     try {
-        git tag $tagName
-        if ($?) {  # 如果 tag 创建成功
-            git push origin $tagName
+        git tag $fullTagName
+        if ($?) { 
+            git push origin $fullTagName
         }
     }
     catch {
