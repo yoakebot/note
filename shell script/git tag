@@ -2,6 +2,7 @@ Test-Path $PROFILE
 New-Item -Path $PROFILE -Type File -Force
 notepad $PROFILE
 . $PROFILE
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 function gtp($tagName) {
     # 检查 tag 名称是否为空
