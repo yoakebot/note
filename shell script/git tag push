@@ -13,13 +13,29 @@ function gtp($tagName) {
     $datePrefix = "release_" + (Get-Date -Format "yyyyMMdd") + "_"
     $fullTagName = $datePrefix + $tagName
 
-    try {
-        git tag $fullTagName
-        if ($?) { 
-            git push origin $fullTagName
+    if (git tag -l $fullTagName) {
+        try {
+            git push origin refs/tags/$fullTagName
+        }
+        catch {
+            Write-Error "Error occurred: $_"
         }
     }
-    catch {
-        Write-Error "Error occurred: $_"
+    else {
+        try {
+            git tag $fullTagName
+            if ($?) { 
+                try {
+                    git push origin $fullTagName
+                }
+                catch {
+                    Write-Error "Error occurred while pushing: $_"
+                    git tag -d $fullTagName
+                }
+            }
+        }
+        catch {
+            Write-Error "Error occurred while creating tag: $_"
+        }
     }
 }
