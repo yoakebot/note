@@ -5,13 +5,14 @@ notepad $PROFILE
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 function gtp($tagName) {
-    if ([string]::IsNullOrWhiteSpace($tagName)) {
-        Write-Error "Tag name cannot be empty"
-        return
-    }
 
-    $datePrefix = "release_" + (Get-Date -Format "yyyyMMdd") + "_"
-    $fullTagName = $datePrefix + $tagName
+    $datePrefix = "release_" + (Get-Date -Format "yyyyMMdd")
+    $dateSubfix = (Get-Date -Format "HHmm")
+    if ([string]::IsNullOrWhiteSpace($tagName)) {
+        $fullTagName = $datePrefix + "_" + $dateSubfix
+    } else {
+        $fullTagName = $datePrefix + "_" + $tagName + "_" + $dateSubfix
+    }
 
     if (git tag -l $fullTagName) {
         try {
