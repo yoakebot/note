@@ -10,10 +10,14 @@ function gtp($tagName) {
     $dateSubfix = (Get-Date -Format "HHmm")
     if ([string]::IsNullOrWhiteSpace($tagName)) {
         $fullTagName = $datePrefix + "_" + $dateSubfix
-    } else {
+    }
+    elseif ($tagName -like "*_?" -or $tagName -like "*_??") {
+        $fullTagName = $datePrefix + "_" + $tagName
+    }
+    else {
         $fullTagName = $datePrefix + "_" + $tagName + "_" + $dateSubfix
     }
-
+    
     if (git tag -l $fullTagName) {
         try {
             git push origin refs/tags/$fullTagName
