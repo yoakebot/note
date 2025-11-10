@@ -1,13 +1,10 @@
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -76,38 +73,6 @@ public class DateTimeSerializerConfig {
         }
     }
 
-    public class MultiFormatLocalTimeDeserializer extends JsonDeserializer<LocalTime> {
-        private static final List<DateTimeFormatter> FORMATTERS = Arrays.asList(
-                DateTimeFormatter.ofPattern("HH:mm:ss"),
-                DateTimeFormatter.ofPattern("HH:mm"),
-                DateTimeFormatter.ofPattern("H:mm"),
-                DateTimeFormatter.ISO_LOCAL_TIME
-        );
-
-        @Override
-        public LocalTime deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-            String timeStr = p.getText().trim();
-
-            for (DateTimeFormatter formatter : FORMATTERS) {
-                try {
-                    return LocalTime.parse(timeStr, formatter);
-                } catch (DateTimeParseException e) {
-                    continue;
-                }
-            }
-            throw new JsonParseException(p, "Cannot parse time value: " + timeStr);
-        }
-    }
-
-    @Bean
-    public Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
-        return builder -> {
-            builder.deserializerByType(LocalTime.class, new MultiFormatLocalTimeDeserializer());
-            // 设置序列化输出格式
-            builder.serializers(new LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm")));
-        };
-    }
-
     @Bean
     public LocalDateTimeSerializer localDateTimeSerializer() {
         return new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATE_PATTERNS.get(1)));
@@ -130,10 +95,5 @@ public class DateTimeSerializerConfig {
                             SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                     .dateFormat(new SimpleDateFormat(DATE_PATTERNS.get(1)));
         };
-    }
-
-    @Bean
-    public JacksonConverterFactory jsonConverterFactory(ObjectMapper retrofitObjectMapper) {
-        return JacksonConverterFactory.create(retrofitObjectMapper);
     }
 }
